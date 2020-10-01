@@ -1,0 +1,29 @@
+First, let's create the folder strucutre on HDFS to store the files
+
+hdfs dfs -mkdir /trivago
+hdfs dfs -mkdir /trivago/task1
+hdfs dfs -mkdir /trivago/task1/tables
+
+
+hdfs dfs -put bedandBLD_master_list_20200203.csv /trivago/task1
+hdfs dfs -put lookandbook_hotel_list_20200203.csv /trivago/task1
+
+
+Next, let's create the Hive tables.
+
+create database if not exists trivago;
+use trivago;
+
+
+create external table if not exists advertiser_hotels (hotel_id String, hotel_name String)
+COMMENT "advertiser_hotels"
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n' 
+STORED AS TEXTFILE 
+LOCATION 'hdfs:///trivago/task1/tables'
+tblproperties ('skip.header.line.count"="1');
+
+
+LOAD DATA INPATH 'hdfs:///trivago/task1/bedandBLD_master_list_20200203.csv' INTO TABLE advertiser_hotels;
+LOAD DATA INPATH 'hdfs:///trivago/task1/lookandbook_hotel_list_20200203.csv' INTO TABLE advertiser_hotels;
