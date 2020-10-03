@@ -75,7 +75,7 @@ object Task3 extends Serializable {
       .partitionBy("country").orderBy(col("booking_volume").desc)
     val bookingWindowRank = rank().over(bookingWindow)
 
-    bookings_df.select($"*", bookingWindowRank as "volume_rank")
+    bookings_df.coalesce(1).select($"*", bookingWindowRank as "volume_rank")
       .where($"volume_rank" === 2)
       .write
       .option("header", true)
