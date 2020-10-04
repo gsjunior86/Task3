@@ -22,7 +22,7 @@ object Task3 extends Serializable {
 
     val spark = SparkSession.builder()
     .appName("Task3")
-    .master("local[*]")
+    //.master("local[*]") //Remove comment if want to run local
     .getOrCreate()
 
     import spark.implicits._
